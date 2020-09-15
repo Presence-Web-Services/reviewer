@@ -7,6 +7,7 @@ import (
   "strings"
   "net"
   "os"
+  "log"
   "net/http"
   "net/url"
 
@@ -16,11 +17,13 @@ import (
 
 var config gmailer.Config
 var status = http.StatusSeeOther
-var authenticated = false
 
-func CreateAndRun(port string) {
+func init() {
   loadEnvVars()
   authenticate()
+}
+
+func CreateAndRun(port string) {
   http.HandleFunc("/", handler)
   http.ListenAndServe(":" + port, nil)
 }
@@ -28,8 +31,7 @@ func CreateAndRun(port string) {
 func loadEnvVars() {
   err := godotenv.Load()
   if err != nil {
-    status = http.StatusInternalServerError
-    return
+    log.Fatal("Error: Could not load environment variables from .env file.")
   }
   config.ClientID = os.Getenv("CLIENT_ID")
   config.ClientSecret = os.Getenv("CLIENT_SECRET")
@@ -43,10 +45,8 @@ func loadEnvVars() {
 func authenticate() {
   err := config.Authenticate()
   if err != nil {
-    status = http.StatusInternalServerError
-    return
+    log.Fatal("Error: Could not authenticate with GMail OAuth using credentials.")
   }
-  authenticated = true
 }
 
 func sendEmail() {
@@ -58,12 +58,7 @@ func sendEmail() {
 }
 
 func handler(response http.ResponseWriter, request *http.Request) {
-  if !authenticated {
-    response.WriteHeader(status)
-    return
-  } else {
-    status = http.StatusSeeOther
-  }
+  status = http.StatusSeeOther
   verifyPost(response, request.Method)
   if status != http.StatusSeeOther {
     response.WriteHeader(status)
