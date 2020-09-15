@@ -18,3 +18,9 @@ go mod download
 go build -o ./inquirer-server
 ./inquirer-server
 ```
+
+Running in Docker container:
+```
+docker build -t inquirer .
+docker run -p 80:80 -d inquirer
+```
