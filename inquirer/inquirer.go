@@ -49,6 +49,11 @@ func loadEnvVars() {
   config.EmailTo = os.Getenv("EMAIL_TO")
   config.EmailFrom = os.Getenv("EMAIL_FROM")
   config.Subject = os.Getenv("SUBJECT")
+  if os.Getenv("HP") == "true" {
+    config.HP = true
+  } else {
+    config.HP = false
+  }
 }
 
 // authenticate authenticates a gmailer config
@@ -129,13 +134,17 @@ func validate(body io.ReadCloser) {
 
 // checkBody ensures the POST data body is well-formed
 func checkBody(values url.Values) {
-  if len(values) != 3 {
+  expectedLength := 2
+  if config.HP {
+    expectedLength++;
+  }
+  if len(values) != expectedLength {
     status = http.StatusBadRequest
     errorMessage = "Error: Bad request."
     return
   }
   val, ok := values["hp"];
-  if !ok || len(val) != 1 || val[0] != "" {
+  if config.HP && (!ok || len(val) != 1 || val[0] != "") {
     status = http.StatusBadRequest
     errorMessage = "Error: Bad request."
     return
