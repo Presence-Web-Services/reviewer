@@ -21,7 +21,7 @@ import (
 // gmailer config for sending email
 var config gmailer.Config
 // default status and error message
-var status = http.StatusSeeOther
+var status = http.StatusOK
 var errorMessage = ""
 
 // init loads environment variables and authenticates the gmailer config
@@ -76,7 +76,7 @@ func sendEmail() {
 
 // defaultValues sets the status, errorMessage, ReplyTo, Body all to default values
 func defaultValues() {
-  status = http.StatusSeeOther
+  status = http.StatusOK
   errorMessage = ""
   config.ReplyTo = ""
   config.Body = ""
@@ -86,22 +86,21 @@ func defaultValues() {
 func handler(response http.ResponseWriter, request *http.Request) {
   defaultValues()
   verifyPost(response, request.Method)
-  if status != http.StatusSeeOther {
+  if status != http.StatusOK {
     http.Error(response, errorMessage, status)
     return
   }
   validate(request.Body)
-  if status != http.StatusSeeOther {
+  if status != http.StatusOK {
     http.Error(response, errorMessage, status)
     return
   }
   sendEmail()
-  if status != http.StatusSeeOther {
+  if status != http.StatusOK {
     http.Error(response, errorMessage, status)
     return
   }
-  response.Header().Set("Location", "/email-sent")
-  response.WriteHeader(status)
+  response.Write([]byte("Email sent successfully!"))
 }
 
 // verifyPost ensures that a POST is sent
@@ -152,14 +151,14 @@ func checkBody(values url.Values) {
   val, ok = values["email"];
   if !ok || len(val) != 1 || !emailValid(val[0]) {
     status = http.StatusBadRequest
-    errorMessage = "Error: Bad request. Email is either too long or not valid."
+    errorMessage = "Error: Bad request. Email may be too long or not valid."
     return
   }
   config.ReplyTo = val[0]
   val, ok = values["message"];
   if !ok || len(val) != 1 || !messageValid(val[0]) {
     status = http.StatusBadRequest
-    errorMessage = "Error: Bad request. Message is too long."
+    errorMessage = "Error: Bad request. Message may be too long."
     return
   }
   config.Body = val[0]
