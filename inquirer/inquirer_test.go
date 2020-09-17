@@ -1,9 +1,9 @@
 package inquirer
 
 import (
-  "testing"
+	"testing"
 )
 
 func TestCreate(t *testing.T) {
-  CreateAndRun("8001")
+	CreateAndRun("8001")
 }
