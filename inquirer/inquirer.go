@@ -11,7 +11,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/Presence-Web-Services/gmailer/v2"
+	"github.com/presence-web-services/gmailer/v2"
 	"github.com/joho/godotenv"
 )
 
