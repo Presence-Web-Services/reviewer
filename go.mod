@@ -3,6 +3,6 @@ module github.com/presence-web-services/inquirer
 go 1.15
 
 require (
-	github.com/presence-web-services/gmailer/v2 v2.1.0
+	github.com/presence-web-services/gmailer/v2 v2.1.1
 	github.com/joho/godotenv v1.3.0
 )
