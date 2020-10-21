@@ -10,7 +10,7 @@ REFRESH_TOKEN=your_refresh_token
 EMAIL_TO=to_email
 EMAIL_FROM=from_email
 SUBJECT="Your Subject Here"
-HP=false|true
+SITE="yoursite.com"
 ```
 
 How to run:

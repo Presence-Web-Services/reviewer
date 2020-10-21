@@ -22,6 +22,7 @@ var config gmailer.Config
 var status = http.StatusOK
 var errorMessage = ""
 var hp = ""
+var site = ""
 
 // init loads environment variables and authenticates the gmailer config
 func init() {
@@ -48,11 +49,7 @@ func loadEnvVars() {
 	config.EmailTo = os.Getenv("EMAIL_TO")
 	config.EmailFrom = os.Getenv("EMAIL_FROM")
 	config.Subject = os.Getenv("SUBJECT")
-	if os.Getenv("HP") == "true" {
-		config.HP = true
-	} else {
-		config.HP = false
-	}
+	site = "https://" + os.Getenv("SITE")
 }
 
 // authenticate authenticates a gmailer config
@@ -85,6 +82,12 @@ func defaultValues() {
 // handler verifies a POST is sent, and then validates the POST data, and sends an email if valid
 func handler(response http.ResponseWriter, request *http.Request) {
 	defaultValues()
+	response.Header().Set("Access-Control-Allow-Origin", site)
+	checkOrigin(request)
+	if status != http.StatusOK {
+		http.Error(response, errorMessage, status)
+		return
+	}
 	verifyPost(response, request.Method)
 	if status != http.StatusOK {
 		http.Error(response, errorMessage, status)
@@ -114,6 +117,16 @@ func handler(response http.ResponseWriter, request *http.Request) {
 	response.Write([]byte("Email sent successfully!"))
 }
 
+// checkOrigin ensures origin is from proper website
+func checkOrigin(request *http.Request) {
+	origin := request.Header.Get("Origin")
+	if origin != site {
+		status = http.StatusForbidden
+		errorMessage = "Error: Only certain sites are allowed to use this endpoint."
+		return
+	}
+}
+
 // verifyPost ensures that a POST is sent
 func verifyPost(response http.ResponseWriter, method string) {
 	if method != "POST" {
@@ -127,9 +140,7 @@ func verifyPost(response http.ResponseWriter, method string) {
 func getFormData(request *http.Request) {
 	config.ReplyTo = request.PostFormValue("email")
 	config.Body = request.PostFormValue("message")
-	if config.HP {
-		hp = request.PostFormValue("hp")
-	}
+	hp = request.PostFormValue("hp")
 }
 
 // checkEmail verifies email submitted is valid
