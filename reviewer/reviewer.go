@@ -11,6 +11,7 @@ import (
 	"regexp"
 	"strings"
   "fmt"
+  "strconv"
 
 	"github.com/presence-web-services/gmailer/v2"
 	"github.com/joho/godotenv"
@@ -111,7 +112,7 @@ func handler(response http.ResponseWriter, request *http.Request) {
 		http.Error(response, errorMessage, status)
 		return
 	}
-  checkRating()
+  checkStars()
   if status != http.StatusOK {
 		http.Error(response, errorMessage, status)
 		return
