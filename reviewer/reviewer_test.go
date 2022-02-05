@@ -1,4 +1,4 @@
-package inquirer
+package reviewer
 
 import (
 	"testing"
