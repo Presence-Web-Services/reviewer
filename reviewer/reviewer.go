@@ -175,7 +175,7 @@ func checkName() {
 
 func checkStars() {
   stars_int, err := strconv.Atoi(stars)
-  if err || stars_int < 1 || stars_int > 5 {
+  if err != nil || stars_int < 1 || stars_int > 5 {
     status = http.StatusBadRequest
 		errorMessage = "Error: Star rating must be between 1-5."
 		return
