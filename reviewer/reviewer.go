@@ -10,6 +10,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
+  "fmt"
 
 	"github.com/presence-web-services/gmailer/v2"
 	"github.com/joho/godotenv"
