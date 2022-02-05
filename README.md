@@ -1,4 +1,4 @@
-# inquirer
+# reviewer
 
 Setup .env file:
 ```
