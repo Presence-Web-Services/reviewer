@@ -1,18 +1,18 @@
 FROM golang:alpine as build-env
 
-RUN mkdir /inquirer
-WORKDIR /inquirer
+RUN mkdir /reviewer
+WORKDIR /reviewer
 COPY go.mod .
 COPY go.sum .
 
 RUN go mod download
 COPY . .
 
-RUN go build -o /go/bin/inquirer
+RUN go build -o /go/bin/reviewer
 
 FROM alpine
-COPY --from=build-env /go/bin/inquirer /go/bin/inquirer
+COPY --from=build-env /go/bin/reviewer /go/bin/reviewer
 WORKDIR /go/bin
 COPY .env ./
 EXPOSE 80
-ENTRYPOINT ["./inquirer"]
+ENTRYPOINT ["./reviewer"]

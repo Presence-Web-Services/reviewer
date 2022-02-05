@@ -16,12 +16,12 @@ SITE="yoursite.com"
 How to run:
 ```
 go mod download
-go build -o ./inquirer-server
-./inquirer-server
+go build -o ./reviewer-server
+./reviewer-server
 ```
 
 Running in Docker container:
 ```
-docker build -t inquirer .
-docker run -p 80:80 -d inquirer
+docker build -t reviewer .
+docker run -p 80:80 -d reviewer
 ```

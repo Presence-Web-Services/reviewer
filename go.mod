@@ -1,4 +1,4 @@
-module github.com/presence-web-services/inquirer
+module github.com/presence-web-services/reviewer
 
 go 1.15
 
