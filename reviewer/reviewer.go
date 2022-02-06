@@ -133,7 +133,7 @@ func handler(response http.ResponseWriter, request *http.Request) {
 		http.Error(response, errorMessage, status)
 		return
 	}
-	response.Write([]byte("Email sent successfully!"))
+	response.Write([]byte("Review sent successfully!"))
 }
 
 // checkOrigin ensures origin is from proper website
